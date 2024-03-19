@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <link rel="stylesheet" href="stall.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: bisque;
+        }
+
+        .bill {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .bill-item {
+            margin-bottom: 10px;
+        }
+
+        .bill-item span {
+            display: inline-block;
+            width: 150px;
+        }
+
+        .total-amount {
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PAYMENT SUCCESS</h1>
+        <a href="new.html" class="home">HOME</a>
+        <div class="bill">
+            <h2>Bill Details</h2>
+            <div class="bill-items">
+                <!-- Bill items will be dynamically generated here -->
+            </div>
+            <p class="total-amount">Total: <span id="total-amount">0</span> rupees</p>
+        </div>
+        <p>Payment has been successfully processed. Thank you for visiting!</p>
+    </div>
+
+    <script>
+        function displayBill() {
+            const totalAmount = getTotalAmountFromUrl();
+            const cartItems = getCartItemsFromUrl();
+
+            const billItemsContainer = document.querySelector('.bill-items');
+            billItemsContainer.innerHTML = '';
+
+            let billHtml = '';
+            for (const item of cartItems) {
+                billHtml += `<div class="bill-item">${item.name}: <span>${item.quantity} x ${item.price} rupees</span></div>`;
+            }
+            billItemsContainer.innerHTML = billHtml;
+
+            document.getElementById('total-amount').textContent = totalAmount;
+        }
+
+        // Display bill details when the page loads
+        window.onload = function() {
+            displayBill();
+        };
+
+        function getTotalAmountFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const totalAmount = urlParams.get('totalAmount');
+            return totalAmount;
+        }
+        function getCartItemsFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const cartItemsJson = urlParams.get('cartItems');
+    return JSON.parse(cartItemsJson);
+}
+
+    </script>
+</body>
+</html>

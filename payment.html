@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="stall.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: bisque;
+        }
+
+        .payment-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .payment-options button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .payment-options button:hover {
+            background-color: #0056b3;
+        }
+
+        .cart-items {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cart-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .total-amount {
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PAYMENT</h1>
+        <a href="new.html" class="home">HOME</a>
+        <div class="payment-options">
+            <button onclick="payOnline('PhonePe')">Pay with PhonePe</button>
+            <button onclick="payOnline('Google Pay')">Pay with Google Pay</button>
+            <button onclick="payOnline('Paytm')">Pay with Paytm</button>
+            <button onclick="payCashOnDelivery()">Cash on Delivery</button>
+        </div>
+        <ul class="cart-items">
+            <!-- Cart items will be dynamically generated here -->
+        </ul>
+        <p>Total: <span class="total-amount">0</span> rupees</p>
+    </div>
+
+    <script>
+        // Sample cart data (replace with actual cart data)
+        const cartItems = [
+            { name: "Lemon Juice", quantity: 2, price: 40 },
+            { name: "Orange Juice", quantity: 1, price: 80 },
+            // Add more items as needed
+        ];
+
+        // Function to calculate total cart amount
+        function calculateTotal() {
+            let total = 0;
+            for (const item of cartItems) {
+                total += item.price * item.quantity;
+            }
+            return total;
+        }
+        function displayCart() {
+            const cartItemsElement = document.querySelector('.cart-items');
+            cartItemsElement.innerHTML = '';
+            for (const item of cartItems) {
+                const li = document.createElement('li');
+                li.classList.add('cart-item');
+                li.textContent = `${item.name} x ${item.quantity} - ${item.price * item.quantity} rupees`;
+                cartItemsElement.appendChild(li);
+            }
+            const totalAmountElement = document.querySelector('.total-amount');
+            totalAmountElement.textContent = calculateTotal();
+        }
+        function payOnline(paymentMethod) {
+    // Simulate payment processing (replace with actual payment logic)
+    if (confirm(`Proceed to pay with ${paymentMethod}?`)) {
+        // Redirect to success page if payment is successful
+        const totalAmount = calculateTotal();
+        redirectToPaymentSuccess(totalAmount, cartItems);
+    } else {
+        // Display payment failure message
+        alert('Payment failed. Please try again.');
+    }
+}
+
+// Function to simulate cash on delivery
+function payCashOnDelivery() {
+    // Simulate payment processing (replace with actual payment logic)
+    if (confirm('Proceed with Cash on Delivery?')) {
+        // Redirect to success page if payment is successful
+        const totalAmount = calculateTotal();
+        redirectToPaymentSuccess(totalAmount, cartItems);
+    } else {
+        // Display payment failure message
+        alert('Payment failed. Please try again.');
+    }
+}
+
+
+        function getTotalAmountFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('totalAmount');
+        }
+
+        // Function to get the cart items from the query parameter
+        function getCartItemsFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const cartItemsJson = urlParams.get('cartItems');
+            return JSON.parse(cartItemsJson);
+        }
+
+        // Display the total amount and cart items on the payment page
+        window.onload = function() {
+            const totalAmount = getTotalAmountFromUrl();
+            const cartItems = getCartItemsFromUrl();
+
+            // Display total amount
+            document.querySelector('.total-amount').textContent = totalAmount;
+
+            // Display cart items
+            const cartItemsElement = document.querySelector('.cart-items');
+            cartItemsElement.innerHTML = '';
+            cartItems.forEach(item => {
+                const li = document.createElement('li');
+                li.classList.add('cart-item');
+                li.textContent = `${item.name} x ${item.quantity} - ${item.price * item.quantity} rupees`;
+                cartItemsElement.appendChild(li);
+            });
+        };
+function calculateTotal(cartItems) {
+            let total = 0;
+            for (const item of cartItems) {
+                total += item.price * item.quantity;
+            }
+            return total;
+        }
+
+        // Function to display cart items and total amount
+        function displayCart(cartItems) {
+            const cartItemsElement = document.querySelector('.cart-items');
+            const totalAmountElement = document.querySelector('.total-amount');
+            
+            cartItemsElement.innerHTML = '';
+            let total = 0;
+
+            for (const item of cartItems) {
+                const li = document.createElement('li');
+                li.classList.add('cart-item');
+                const totalPrice = item.price * item.quantity;
+                li.textContent = `${item.name} x ${item.quantity} - ${totalPrice} rupees`;
+                cartItemsElement.appendChild(li);
+                total += totalPrice;
+            }
+
+            totalAmountElement.textContent = total;
+        }
+
+        // Function to handle online payment
+        function payOnline(paymentMethod) {
+            const cartItems = getCartItemsFromUrl();
+            const totalAmount = calculateTotal(cartItems);
+
+            if (confirm(`Proceed to pay with ${paymentMethod}?`)) {
+                redirectToPaymentSuccess(totalAmount, cartItems);
+            } else {
+                alert('Payment failed. Please try again.');
+            }
+        }
+
+        // Function to handle cash on delivery
+        function payCashOnDelivery() {
+            const cartItems = getCartItemsFromUrl();
+            const totalAmount = calculateTotal(cartItems);
+
+            if (confirm('Proceed with Cash on Delivery?')) {
+                redirectToPaymentSuccess(totalAmount, cartItems);
+            } else {
+                alert('Payment failed. Please try again.');
+            }
+        }
+
+        // Function to retrieve cart items from URL parameters
+        function getCartItemsFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const cartItemsJson = urlParams.get('cartItems');
+            return JSON.parse(cartItemsJson) || [];
+        }
+
+        // Function to redirect to payment success page with total amount and cart items
+        function redirectToPaymentSuccess(totalAmount, cartItems) {
+            const queryString = `?totalAmount=${totalAmount}&cartItems=${JSON.stringify(cartItems)}`;
+            const paymentSuccessUrl = `payment-success.html${queryString}`;
+            window.location.href = paymentSuccessUrl;
+        }
+
+        // Display cart items and total amount when the page loads
+        window.onload = function() {
+            const cartItems = getCartItemsFromUrl();
+            displayCart(cartItems);
+        };
+    </script>
+</body>
+</html>
+
+
+
+

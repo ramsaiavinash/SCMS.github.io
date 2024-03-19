@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juice Stall</title>
+    <link rel="stylesheet" href="stall.css">
+</head>
+<body>
+    <div class="container">
+        <h1>JUICE STALL</h1>
+        <a href="new.html" class="home">HOME</a>
+        <div class="juice-container">
+            <!-- Lemon Juice -->
+            <div class="juice-item">
+                <h2>Lemon Juice</h2>
+                <img src="Assets\img\lemon juice ai.jpeg" alt="Lemon Juice">
+                <div class="rate">Rate: 40 rupees per glass</div>
+                <button onclick="addToCart(this.parentElement, 'Lemon Juice', 40, 'Assets\\img\\lemon juice ai.jpeg')">AddToCart</button>
+            </div>
+            <!-- Orange Juice -->
+            <div class="juice-item">
+                <h2>Orange Juice</h2>
+                <img src="Assets\img\orange juice ai.jpeg" alt="Orange Juice">
+                <div class="rate">Rate: 80 rupees per glass</div>
+                <button onclick="addToCart(this.parentElement, 'Orange Juice', 80, 'Assets\\img\\orange juice ai.jpeg')">AddToCart</button>
+            </div>
+            <!-- Banana Juice -->
+            <div class="juice-item">
+                <h2>Banana Juice</h2>
+                <img src="Assets\img\banana juice ai.jpeg" alt="Banana Juice">
+                <div class="rate">Rate: 65 rupees per glass</div>
+                <button onclick="addToCart(this.parentElement, 'Banana Juice', 65, 'Assets\\img\\banana juice ai.jpeg')">AddToCart</button>
+            </div>
+            <!-- Apple Juice -->
+            <div class="juice-item">
+                <h2>Apple Juice</h2>
+                <img src="Assets\img\apple juice ai.jpeg" alt="Apple Juice">
+                <div class="rate">Rate: 70 rupees per glass</div>
+                <button onclick="addToCart(this.parentElement, 'Apple Juice', 70, 'Assets\\img\\apple juice ai.jpeg')">AddToCart</button>
+            </div>
+            <!-- Watermelon Juice -->
+            <div class="juice-item">
+                <h2>Watermelon Juice</h2>
+                <img src="Assets\img\water melon juice ai.jpeg" alt="Watermelon Juice">
+                <div class="rate">Rate: 50 rupees per glass</div>
+                <button onclick="addToCart(this.parentElement, 'Watermelon Juice', 50, 'Assets\\img\\water melon juice ai.jpeg')">AddToCart</button>
+            </div>
+            <!-- Grape Juice -->
+            <div class="juice-item">
+                <h2>Grape Juice</h2>
+                <img src="Assets\img\grape juice ai.jpeg" alt="Grape Juice">
+                <div class="rate">Rate: 60 rupees per glass</div>
+                <button onclick="addToCart(this.parentElement, 'Grape Juice', 60, 'Assets\\img\\grape juice ai.jpeg')">AddToCart</button>
+            </div>
+            <!-- Add more juice items similarly -->
+        </div>
+        <!-- Cart Section -->
+        <div class="cart" id="cart">
+            <h2>Cart</h2>
+            <ul class="cart-items"></ul>
+            <p class="cart-total">Total: <span class="total-amount">0</span> rupees</p>
+            <button onclick="redirectToPayment()">Proceed to Payment</button>
+        </div>
+        <div class="toggle-cart-bottom">
+            <button class="toggle-cart" onclick="toggleCart()">View Cart</button>
+        </div>
+        <!-- Notification Popup -->
+        <div class="notification" id="notification">Item added to cart</div>
+    </div>
+
+    <script>
+        let cart = [];
+
+        function updateCart() {
+            const cartItemsElement = document.querySelector('.cart-items');
+            let total = 0;
+            cartItemsElement.innerHTML = '';
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div><img src="${item.image}" alt="${item.name}"></div>
+                    <div>${item.name} - ${item.price} rupees</div>
+                    <div class="quantity">
+                        <button onclick="decrementCartItem('${item.name}')">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="incrementCartItem('${item.name}')">+</button>
+                    </div>`;
+                cartItemsElement.appendChild(li);
+                total += item.price * item.quantity;
+            });
+            document.querySelector('.total-amount').textContent = total;
+        }
+
+        function redirectToPayment() {
+            const totalAmount = calculateTotal();
+            const paymentUrl = `payment.html?totalAmount=${totalAmount}&cartItems=${JSON.stringify(cart)}`;
+            window.location.href = paymentUrl;
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+            });
+            return total;
+        }
+
+        function addToCart(itemContainer, itemName, itemPrice, imageUrl) {
+            const existingItem = cart.find(item => item.name === itemName);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ name: itemName, price: itemPrice, quantity: 1, image: imageUrl });
+            }
+            updateCart();
+            // Display custom notification
+            const notification = document.getElementById('notification');
+            notification.textContent = `${itemName} added to cart`;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 2000); // Hide the notification after 2 seconds
+        }
+
+        function incrementCartItem(itemName) {
+            const item = cart.find(item => item.name === itemName);
+            item.quantity++;
+            updateCart();
+        }
+
+        function decrementCartItem(itemName) {
+            const item = cart.find(item => item.name === itemName);
+            if (item.quantity > 0) {
+                item.quantity--;
+            updateCart();
+            }
+            // Display custom notification
+            const notification = document.getElementById('notification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 2000); // Hide the notification after 2 seconds
+        }
+        function toggleCart() {
+            const cartElement = document.getElementById('cart');
+            const toggleButton = document.querySelector('.toggle-cart');
+            cartElement.classList.toggle('cart-visible');
+            toggleButton.textContent = cartElement.classList.contains('cart-visible') ? 'Close Cart' : 'View Cart';
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

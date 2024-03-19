@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canteen Stalls</title>
+    <link rel="stylesheet" href="stall.css">
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: bisque;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            color: bisque;
+        }
+
+        .stalls-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .stall-item {
+            width: calc(50% - 20px);
+            margin-bottom: 40px;
+            box-sizing: border-box;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .stall-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stall-item img {
+            width: 100%;
+            display: block;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .stall-item a {
+            display: block;
+            padding: 15px 0;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .stall-item {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CANTEEN STALLS</h1>
+        
+        <div class="stalls-container">
+            <!-- Juice Stall -->
+            <div class="stall-item">
+                <img src="Assets\img\juice ai.jpeg" alt="Juice Stall">
+                <a href="juice.html">JUICE STALL</a>
+            </div>
+
+            <!-- Tiffin Stall -->
+            <div class="stall-item">
+                <img src="Assets\img\tiffin ai.jpeg" alt="Tiffin Stall">
+                <a href="Tiffin.html">TIFFIN STALL</a>
+            </div>
+
+            <!-- Chinese Stall -->
+            <div class="stall-item">
+                <img src="Assets\img\chineese  ai.jpeg" alt="Chinese Stall">
+                <a href="Chinnese.html">CHINESE STALL</a>
+            </div>
+
+            <!-- Store -->
+            <div class="stall-item">
+                <img src="Assets\img\store ai.jpeg" alt="Store">
+                <a href="Store.html">STORE</a>
+            </div>
+
+            <!-- Modern KFC -->
+            <div class="stall-item">
+                <img src="Assets\img\kfc ai.jpeg" alt="Modern KFC">
+                <a href="Modernkfc.html">MODERN KFC</a>
+            </div>
+
+            <!-- Snacks Stall -->
+            <div class="stall-item">
+                <img src="Assets\img\snacks ai.jpeg" alt="Snacks Stall">
+                <a href="Snacks.html">SNACKS</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+

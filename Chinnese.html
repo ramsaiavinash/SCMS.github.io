@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chinese Stall</title>
+    <link rel="stylesheet" href="stall.css">
+</head>
+<body>
+    <div class="container">
+        <h1>CHINEESE STALL</h1>
+        <a href="new.html" class="home">HOME</a>
+        <div class="chinese-container">
+            <!-- Chicken Biriyani -->
+            <div class="chinese-item">
+                <h2>Chicken Biriyani</h2>
+                <img src="Assets\img\chickenbiriyani ai.jpeg" alt="Chicken Biriyani">
+                <div class="rate">Rate: 160 rupees</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Chicken Biriyani', 160, 'Assets\\img\\chickenbiriyani ai.jpeg')">AddToCart</button>
+                </div>
+
+            <!-- Chicken Fried Rice -->
+            <div class="chinese-item">
+                <h2>Chicken Fried Rice</h2>
+                <img src="Assets\img\chicke fried rice ai.jpeg" alt="Chicken Fried Rice">
+                <div class="rate">Rate: 130 rupees</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Chicken Fried Rice', 130, 'Assets\\img\\chicke fried rice ai.jpeg')">AddToCart</button>
+                </div>
+
+            <!-- Chicken Manchurian -->
+            <div class="chinese-item">
+                <h2>Chicken Manchurian</h2>
+                <img src="Assets\img\chiken manchurian ai.jpeg" alt="Chicken Manchurian">
+                <div class="rate">Rate: 100 rupees</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Chicken Manchurian', 100, 'Assets\\img\\chiken manchurian ai.jpeg')">AddToCart</button>
+                </div>
+
+            <!-- Veg Biriyani -->
+            <div class="chinese-item">
+                <h2>Veg Biriyani</h2>
+                <img src="Assets\img\veg fried rice ai.jpeg" alt="Veg Biriyani">
+                <div class="rate">Rate: 150 rupees</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Veg Biriyani', 150, 'Assets\\img\\veg fried rice ai.jpeg')">AddToCart</button>
+                </div>
+
+            <!-- Veg Fried Rice -->
+            <div class="chinese-item">
+                <h2>Veg Fried Rice</h2>
+                <img src="Assets\img\veg biriyania ai.jpeg" alt="Veg Fried Rice">
+                <div class="rate">Rate: 120 rupees</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Veg Fried Rice', 120, 'Assets\\img\\veg biriyania ai.jpeg')">AddToCart</button>
+                </div>
+
+            <!-- Gobi Manchurian -->
+            <div class="chinese-item">
+                <h2>Gobi Manchurian</h2>
+                <img src="Assets\img\gobi ai.jpeg" alt="Gobi Manchurian">
+                <div class="rate">Rate: 90 rupees</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Gobi Manchurian', 90, 'Assets\\img\\gobi ai.jpeg')">AddToCart</button>
+                </div>
+            </div>
+        <!-- Cart Section -->
+        <div class="cart" id="cart">
+            <h2>Cart</h2>
+            <ul class="cart-items"></ul>
+            <p class="cart-total">Total: <span class="total-amount">0</span> rupees</p>
+            <button onclick="redirectToPayment()">Proceed to Payment</button>
+        </div>
+        <div class="toggle-cart-bottom">
+            <button class="toggle-cart" onclick="toggleCart()">View Cart</button>
+        </div>
+    </div>
+</div>
+<!-- Notification Popup -->
+<div class="notification" id="notification">Item added to cart</div>
+</div>
+
+    <script>
+   let cart = [];
+
+function updateCart() {
+    const cartItemsElement = document.querySelector('.cart-items');
+    let total = 0;
+    cartItemsElement.innerHTML = '';
+    cart.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div><img src="${item.image}" alt="${item.name}"></div>
+            <div>${item.name} - ${item.price} rupees</div>
+            <div class="quantity">
+                <button onclick="decrementCartItem('${item.name}')">-</button>
+                <span>${item.quantity}</span>
+                <button onclick="incrementCartItem('${item.name}')">+</button>
+            </div>`;
+        cartItemsElement.appendChild(li);
+        total += item.price * item.quantity;
+    });
+    document.querySelector('.total-amount').textContent = total;
+}
+
+function redirectToPayment() {
+    const totalAmount = calculateTotal();
+    const paymentUrl = `payment.html?totalAmount=${totalAmount}&cartItems=${JSON.stringify(cart)}`;
+    window.location.href = paymentUrl;
+}
+
+function calculateTotal() {
+    let total = 0;
+    cart.forEach(item => {
+        total += item.price * item.quantity;
+    });
+    return total;
+}
+
+function addToCart(itemContainer, itemName, itemPrice, imageUrl) {
+    const existingItem = cart.find(item => item.name === itemName);
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({ name: itemName, price: itemPrice, quantity: 1, image: imageUrl });
+    }
+    updateCart();
+    // Display custom notification
+    const notification = document.getElementById('notification');
+    notification.textContent = `${itemName} added to cart`;
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 2000); // Hide the notification after 2 seconds
+}
+
+function incrementCartItem(itemName) {
+    const item = cart.find(item => item.name === itemName);
+    item.quantity++;
+    updateCart();
+}
+
+function decrementCartItem(itemName) {
+    const item = cart.find(item => item.name === itemName);
+    if (item.quantity > 0) {
+        item.quantity--;
+    updateCart();
+    }
+    // Display custom notification
+    const notification = document.getElementById('notification');
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 2000); // Hide the notification after 2 seconds
+}
+function toggleCart() {
+    const cartElement = document.getElementById('cart');
+    const toggleButton = document.querySelector('.toggle-cart');
+    cartElement.classList.toggle('cart-visible');
+    toggleButton.textContent = cartElement.classList.contains('cart-visible') ? 'Close Cart' : 'View Cart';
+}
+    </script>
+</body>
+</html>
+
+
+

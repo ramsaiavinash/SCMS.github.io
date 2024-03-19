@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store</title>
+    <link rel="stylesheet" href="stall.css">
+</head>
+<body>
+    <div class="container">
+        <h1>STORE</h1>
+        <a href="new.html" class="home">HOME</a>
+        <div class="store-container">
+            <!-- Chocolate -->
+            <div class="store-item">
+                <h2>Chocolate</h2>
+                <img src="Assets\img\choclates ai.jpeg" alt="Chocolate">
+                <div class="rate">Rate: 30 rupees per bar</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Chocolate', 30, 'Assets\\img\\choclates ai.jpeg')">AddToCart</button>
+                </div>
+
+            <!-- Biscuits -->
+            <div class="store-item">
+                <h2>Biscuits</h2>
+                <img src="Assets\img\biscuits ai.jpeg" alt="Biscuits">
+                <div class="rate">Rate: 20 rupees per pack</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Biscuits', 20, 'Assets\\img\\biscuits ai.jpeg')">AddToCart</button>
+                </div>
+
+            <!-- Ice Cream -->
+            <div class="store-item">
+                <h2>Ice Cream</h2>
+                <img src="Assets\img\icecreams.jpeg" alt="Ice Cream">
+                <div class="rate">Rate: 50 rupees per cone</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Ice Cream', 50, 'Assets\\img\\icecreams.jpeg')">AddToCart</button>
+                </div>
+
+            <!-- Cake -->
+            <div class="store-item">
+                <h2>Cake</h2>
+                <img src="Assets\img\cakes ai.jpeg" alt="Cake">
+                <div class="rate">Rate: 40 rupees per slice</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Cake', 40, 'Assets\\img\\cakes ai.jpeg')">AddToCart</button>
+                </div>
+
+            <!-- Stationery -->
+            <div class="store-item">
+                <h2>Stationery</h2>
+                <img src="Assets\img\stationery ai.jpeg" alt="Stationery">
+                <div class="rate">Rate: 10 rupees per item</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Stationery', 10, 'Assets\\img\\stationery ai.jpeg')">AddToCart</button>
+                </div>
+            <!-- Basic Needs -->
+            <div class="store-item">
+                <h2>Basic Needs</h2>
+                <img src="Assets\img\kirana ai.jpeg" alt="Basic Needs">
+                <div class="rate">Rate: 50 rupees per pack</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Basic Needs', 50, 'Assets\\img\\kirana ai.jpeg')">AddToCart</button>
+                </div>
+            </div>
+        <!-- Cart Section -->
+        <div class="cart" id="cart">
+            <h2>Cart</h2>
+            <ul class="cart-items"></ul>
+            <p class="cart-total">Total: <span class="total-amount">0</span> rupees</p>
+            <button onclick="redirectToPayment()">Proceed to Payment</button>
+        </div>
+        <div class="toggle-cart-bottom">
+            <button class="toggle-cart" onclick="toggleCart()">View Cart</button>
+        </div>
+    </div>
+</div>
+<!-- Notification Popup -->
+<div class="notification" id="notification">Item added to cart</div>
+</div>
+
+    <script>
+   let cart = [];
+
+function updateCart() {
+    const cartItemsElement = document.querySelector('.cart-items');
+    let total = 0;
+    cartItemsElement.innerHTML = '';
+    cart.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div><img src="${item.image}" alt="${item.name}"></div>
+            <div>${item.name} - ${item.price} rupees</div>
+            <div class="quantity">
+                <button onclick="decrementCartItem('${item.name}')">-</button>
+                <span>${item.quantity}</span>
+                <button onclick="incrementCartItem('${item.name}')">+</button>
+            </div>`;
+        cartItemsElement.appendChild(li);
+        total += item.price * item.quantity;
+    });
+    document.querySelector('.total-amount').textContent = total;
+}
+
+function redirectToPayment() {
+    const totalAmount = calculateTotal();
+    const paymentUrl = `payment.html?totalAmount=${totalAmount}&cartItems=${JSON.stringify(cart)}`;
+    window.location.href = paymentUrl;
+}
+
+function calculateTotal() {
+    let total = 0;
+    cart.forEach(item => {
+        total += item.price * item.quantity;
+    });
+    return total;
+}
+
+function addToCart(itemContainer, itemName, itemPrice, imageUrl) {
+    const existingItem = cart.find(item => item.name === itemName);
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({ name: itemName, price: itemPrice, quantity: 1, image: imageUrl });
+    }
+    updateCart();
+    // Display custom notification
+    const notification = document.getElementById('notification');
+    notification.textContent = `${itemName} added to cart`;
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 2000); // Hide the notification after 2 seconds
+}
+
+function incrementCartItem(itemName) {
+    const item = cart.find(item => item.name === itemName);
+    item.quantity++;
+    updateCart();
+}
+
+function decrementCartItem(itemName) {
+    const item = cart.find(item => item.name === itemName);
+    if (item.quantity > 0) {
+        item.quantity--;
+    updateCart();
+    }
+    // Display custom notification
+    const notification = document.getElementById('notification');
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 2000); // Hide the notification after 2 seconds
+}
+function toggleCart() {
+    const cartElement = document.getElementById('cart');
+    const toggleButton = document.querySelector('.toggle-cart');
+    cartElement.classList.toggle('cart-visible');
+    toggleButton.textContent = cartElement.classList.contains('cart-visible') ? 'Close Cart' : 'View Cart';
+}
+    </script>
+</body>
+</html>
+
+
+
+
+

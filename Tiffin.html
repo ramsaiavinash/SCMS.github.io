@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiffin Stall</title>
+    <link rel="stylesheet" href="stall.css">
+</head>
+<body>
+    <div class="container">
+        <h1>TIFFIN STALL</h1>
+        <a href="new.html" class="home">HOME</a>
+        <div class="tiffin-container">
+            <!-- Idly -->
+            <div class="tiffin-item">
+                <h2>Idly</h2>
+                <img src="Assets\img\idly ai.jpeg" alt="Idly">
+                <div class="rate">Rate: 30 rupees per piece</div>              
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Idly', 30, 'Assets\\img\\idly ai.jpeg')">AddToCart</button>
+            </div>
+
+            <!-- Vada -->
+            <div class="tiffin-item">
+                <h2>Vada</h2>
+                <img src="Assets\img\vada ai.jpeg" alt="Vada">
+                <div class="rate">Rate: 25 rupees per piece</div>
+                <button onclick="addToCart(this.parentElement.parentElement, 'vada', 25, 'Assets\\img\\vada ai.jpeg')">AddToCart</button>
+            </div>
+
+            <!-- Dosa -->
+            <div class="tiffin-item">
+                <h2>Dosa</h2>
+                <img src="Assets\img\dosa ai.jpeg" alt="Dosa">
+                <div class="rate">Rate: 40 rupees per piece</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Dosa', 40, 'Assets\\img\\dosa ai.jpeg')">AddToCart</button>
+            </div>
+
+            <!-- Bonda -->
+            <div class="tiffin-item">
+                <h2>Bonda</h2>
+                <img src="Assets\img\bonda ai.jpeg" alt="Bonda">
+                <div class="rate">Rate: 35 rupees per piece</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Bonda', 35, 'Assets\\img\\bonda ai.jpeg')">AddToCart</button>
+                </div>
+
+            <!-- Puri -->
+            <div class="tiffin-item">
+                <h2>Puri</h2>
+                <img src="Assets\img\puri ai.jpeg" alt="Puri">
+                <div class="rate">Rate: 30 rupees per piece</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Puri', 30, 'Assets\\img\\puri ai.jpeg')">AddToCart</button>
+                </div>
+           
+
+            <!-- Upma -->
+            <div class="tiffin-item">
+                <h2>Upma</h2>
+                <img src="Assets\img\upma ai.jpeg" alt="Upma">
+                <div class="rate">Rate: 25 rupees per plate</div>
+                    <button onclick="addToCart(this.parentElement.parentElement, 'Upma', 60, 'Assets\\img\\upma ai.jpeg')">AddToCart</button>
+                </div>
+        </div>
+        <!-- Cart Section -->
+        <div class="cart" id="cart">
+            <h2>Cart</h2>
+            <ul class="cart-items"></ul>
+            <p class="cart-total">Total: <span class="total-amount">0</span> rupees</p>
+            <button onclick="redirectToPayment()">Proceed to Payment</button>
+        </div>
+        <div class="toggle-cart-bottom">
+            <button class="toggle-cart" onclick="toggleCart()">View Cart</button>
+        </div>
+    </div>
+</div>
+<!-- Notification Popup -->
+<div class="notification" id="notification">Item added to cart</div>
+</div>
+    <script>
+     let cart = [];
+
+function updateCart() {
+    const cartItemsElement = document.querySelector('.cart-items');
+    let total = 0;
+    cartItemsElement.innerHTML = '';
+    cart.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div><img src="${item.image}" alt="${item.name}"></div>
+            <div>${item.name} - ${item.price} rupees</div>
+            <div class="quantity">
+                <button onclick="decrementCartItem('${item.name}')">-</button>
+                <span>${item.quantity}</span>
+                <button onclick="incrementCartItem('${item.name}')">+</button>
+            </div>`;
+        cartItemsElement.appendChild(li);
+        total += item.price * item.quantity;
+    });
+    document.querySelector('.total-amount').textContent = total;
+}
+
+function redirectToPayment() {
+    const totalAmount = calculateTotal();
+    const paymentUrl = `payment.html?totalAmount=${totalAmount}&cartItems=${JSON.stringify(cart)}`;
+    window.location.href = paymentUrl;
+}
+
+function calculateTotal() {
+    let total = 0;
+    cart.forEach(item => {
+        total += item.price * item.quantity;
+    });
+    return total;
+}
+
+function addToCart(itemContainer, itemName, itemPrice, imageUrl) {
+    const existingItem = cart.find(item => item.name === itemName);
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({ name: itemName, price: itemPrice, quantity: 1, image: imageUrl });
+    }
+    updateCart();
+    // Display custom notification
+    const notification = document.getElementById('notification');
+    notification.textContent = `${itemName} added to cart`;
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 2000); // Hide the notification after 2 seconds
+}
+
+function incrementCartItem(itemName) {
+    const item = cart.find(item => item.name === itemName);
+    item.quantity++;
+    updateCart();
+}
+
+function decrementCartItem(itemName) {
+    const item = cart.find(item => item.name === itemName);
+    if (item.quantity > 0) {
+        item.quantity--;
+    updateCart();
+    }
+    // Display custom notification
+    const notification = document.getElementById('notification');
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 2000); // Hide the notification after 2 seconds
+}
+function toggleCart() {
+    const cartElement = document.getElementById('cart');
+    const toggleButton = document.querySelector('.toggle-cart');
+    cartElement.classList.toggle('cart-visible');
+    toggleButton.textContent = cartElement.classList.contains('cart-visible') ? 'Close Cart' : 'View Cart';
+}
+    </script>
+</body>
+</html>
+
+
+
+
+
